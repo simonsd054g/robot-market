@@ -63,7 +63,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/robots`).then(res => {
+    axios.get(`${process.env.REACT_APP_API}/robots`).then(res => {
       let robots = res.data.data.map((robot) => ({
         uuid: uuid4(),
         ...robot
