@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { v4 as uuid4 } from 'uuid';
 import { cloneDeep, filter, findIndex, remove, sortBy } from 'lodash';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { createRobots } from '../../features/robotSlice';
 import Dashboard from '../../components/layouts/Dashboard';
 
 const LoaderWrapper = styled.div`
@@ -13,8 +15,9 @@ const LoaderWrapper = styled.div`
 `;
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const originalRobots = useSelector(state => state?.robots?.robots);
 
-  const [originalRobots, setOriginalRobots] = useState(null);
   const [robots, setRobots] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [materials, setMaterials] = useState([]);
@@ -67,7 +70,7 @@ export default function Home() {
       }));
       robots = sortBy(robots, (robot) => robot.name);
       setRobots(robots);
-      setOriginalRobots(robots);
+      dispatch(createRobots(robots));
       setMaterials([...new Set(robots.map((robot) => robot.material))].sort());
     });
   }, []);
